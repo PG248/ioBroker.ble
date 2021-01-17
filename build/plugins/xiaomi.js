@@ -1,6 +1,6 @@
 "use strict";
 /*!
- * Plugin for Xiaomi devices using the fe95 characteristic
+ * Plugin for Xiaomi devices using the fdcd characteristic
  */
 const objects_1 = require("alcalzone-shared/objects");
 const global_1 = require("../lib/global");
@@ -30,12 +30,12 @@ const testedPeripherals = new Map();
 const plugin = {
     name: "Xiaomi",
     description: "Xiaomi devices",
-    advertisedServices: ["fe95"],
+    advertisedServices: ["fdcd"],
     isHandling: (p) => {
-        // If the peripheral has no serviceData with UUID fe95, this is not for us
+        // If the peripheral has no serviceData with UUID fdcd, this is not for us
         if (!p.advertisement ||
             !p.advertisement.serviceData ||
-            !p.advertisement.serviceData.some((entry) => entry.uuid === "fe95"))
+            !p.advertisement.serviceData.some((entry) => entry.uuid === "fdcd"))
             return false;
         const mac = p.address.toLowerCase();
         const cached = testedPeripherals.get(mac);
@@ -46,7 +46,7 @@ const plugin = {
         // Try to parse advertisement data as a XiaomiEvent to see if this
         // is for us
         let ret = false;
-        const data = plugin_1.getServiceData(p, "fe95");
+        const data = plugin_1.getServiceData(p, "fdcd");
         if (data != undefined) {
             const event = parseAdvertisementEvent(data);
             ret = event != undefined;
@@ -59,7 +59,7 @@ const plugin = {
         return ret;
     },
     createContext: (peripheral) => {
-        const data = plugin_1.getServiceData(peripheral, "fe95");
+        const data = plugin_1.getServiceData(peripheral, "fdcd");
         if (data == undefined)
             return;
         global_1.Global.adapter.log.debug(`xiaomi >> got data: ${data.toString("hex")}`);
